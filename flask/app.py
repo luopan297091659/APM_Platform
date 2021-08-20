@@ -7,6 +7,8 @@ from flask import Flask, render_template
 from flask.json import jsonify
 from pyecharts import options as opts
 from pyecharts.charts import Bar,Line,Timeline,Grid
+from pyecharts.options.global_options import ToolboxOpts
+from pyecharts.types import Toolbox
 from data_collection import device_meminfo,sql_opera
 from pyecharts.commons.utils import JsCode
 import datetime,string
@@ -238,5 +240,5 @@ def lines():
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=5000,debug=True)
+    app.run(host='127.0.0.1', port=5003,debug=True)
 

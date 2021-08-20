@@ -5,11 +5,22 @@
 <html style="height: 100%">
     <head>
         <meta charset="utf-8">
-    </head>
-    <body style="height: 100%; margin: 0">
-        <div id="container" style="height: 100%"></div>
         <script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    </head>
+    <body style="height: 100%; margin: 0">
+        <h1 align="center">AR Glass设备性能监控</h1>
+        <div>
+            <input type="text"  >
+            <br>
+        </div>
+        <div class="father">
+            <el-button type="primary" @click="startHandler">开始录制</el-button>
+		    <el-button type="primary" @click="endHandler">结束录制</el-button>
+        </div>
+        <br>
+        <div id="container" style="height: 100%"></div>
+
         <!-- Uncomment this line if you want to dataTool extension
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/extension/dataTool.min.js"></script>
         -->
@@ -42,11 +53,8 @@
         //var data7=[];
         //var data8=[];
         //var option;
-
+        
         option = {
-                    title: {
-                        text: 'AR Glass设备性能监控'
-                    },
                     tooltip: {
                         trigger: 'axis',
                         axisPointer: {
@@ -61,9 +69,9 @@
                         data: ['java_mem', 'native_mem', 'code_mem', 'stack_mem', 'graph_mem', 'others_mem', 'system_mem', 'total_mem']
                     },
                     toolbox: {
-                        feature: {
-                            saveAsImage: {}
-                        }
+                         feature: {
+                              saveAsImage: {}
+                          }
                     },
                     grid: {
                         left: '3%',
@@ -192,7 +200,7 @@
         function fetchData() {
             $.ajax({
                 type: "GET",
-                url: "http://127.0.0.1:5000/lineCharts",
+                url: "/lineCharts",
                 dataType: "json",
                 success: function (result) {
                     chart.setOption(result);
@@ -217,7 +225,7 @@
         function getDynamicData() {
             $.ajax({
                 type: "GET",
-                url: "http://127.0.0.1:5000/lineDynamicDatas",
+                url: "/lineDynamicDatas",
                 dataType: "json",
                 success: function (result) {
                     time_data.push([result.name]);
@@ -230,9 +238,6 @@
                     data7.push([result.name,result.value.system_mem]);
                     data8.push([result.name,result.value.total_mem]);
                     chart.setOption({
-                        title: {
-                            text: 'AR Glass设备性能监控'
-                        },
                         tooltip: {
                             trigger: 'axis',
                             axisPointer: {
@@ -245,17 +250,6 @@
                         legend: {
                             //data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
                             data: ['java_mem', 'native_mem', 'code_mem', 'stack_mem', 'graph_mem', 'others_mem', 'system_mem', 'total_mem']
-                        },
-                        toolbox: {
-                            feature: {
-                                saveAsImage: {}
-                            }
-                        },
-                        grid: {
-                            left: '3%',
-                            right: '4%',
-                            bottom: '3%',
-                            containLabel: true
                         },
                         xAxis: [
                     {
