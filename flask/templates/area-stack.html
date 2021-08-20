@@ -11,12 +11,14 @@
     <body style="height: 100%; margin: 0">
         <h1 align="center">AR Glass设备性能监控</h1>
         <div>
+            <p>请输入设备sn或ip地址</p>
             <input type="text"  >
-            <br>
+            <p>请选择监控项</p>
+            <input type="text"  >
         </div>
         <div class="father">
-            <el-button type="primary" @click="startHandler">开始录制</el-button>
-		    <el-button type="primary" @click="endHandler">结束录制</el-button>
+            <el-button type="primary" @click="endHandler" style="float:right">&nbsp&nbsp结束录制&nbsp&nbsp;</el-button>
+            <el-button type="primary" @click="startHandler" style="float:right">&nbsp&nbsp开始录制&nbsp;&nbsp;</el-button>
         </div>
         <br>
         <div id="container" style="height: 100%"></div>
