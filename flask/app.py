@@ -1,7 +1,7 @@
 #! /bin/python3
 # -*- coding:utf-8 -*-
 
-from flask import Flask,render_template,request,Response,redirect,url_for,send_from_directory
+from flask import Flask,render_template,request,Response,redirect,url_for,send_from_directory,g
 from random import randrange
 from flask.json import jsonify
 from pyecharts import options as opts
@@ -11,7 +11,6 @@ from pyecharts.types import Toolbox
 from data_collection import meminfo_query,sql_opera,android_adb
 from pyecharts.commons.utils import JsCode
 import datetime,string,os
-from flask import g
 
 adb = android_adb.ADB()
 meminfo = meminfo_query.meminfo()
@@ -166,25 +165,26 @@ def get_line_charts():
 def update_line_datas():
     current_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
     if data.device_ip1:
-        info = meminfo.get_app_meminfo(data.device_ip1, "com.rokid.ai.turen")
-        info = [ round(float(i)/1024,2) for i in info ]
-        return jsonify({'name':current_time,'value':{'java_mem': info[0], 'native_mem': info[1], 'code_mem': info[2], 'stack_mem': info[3], 'graph_mem': info[4], 'others_mem': info[5], 'system_mem': info[6], 'total_mem': info[7]}})
-
+        try:
+            info = meminfo.get_app_meminfo(data.device_ip1, "com.rokid.ai.turen")
+            info = [ round(float(i)/1024,2) for i in info ]
+            return jsonify({'name':current_time,'value':{'java_mem': info[0], 'native_mem': info[1], 'code_mem': info[2], 'stack_mem': info[3], 'graph_mem': info[4], 'others_mem': info[5], 'system_mem': info[6], 'total_mem': info[7]}})
+        except Exception as e:
+            return  jsonify({}) 
     else:
-        return jsonify({'name':current_time,'value':{'java_mem': 0, 'native_mem': 0, 'code_mem': 0, 'stack_mem': 0, 'graph_mem': 0, 'others_mem': 0, 'system_mem': 0, 'total_mem': 0}})
-
+        return  jsonify({})
 
 @app.route("/linkdevice", methods=["POST", "GET"])
 def link_device():
-    g.device_message = {}
+    device_message = {}
     if request.method == "GET":
         data.device_ip2 = request.args['device']
         adb.adb_connect(str(data.device_ip2))
         device_sn = adb.adb_dev_output(data.device_ip2, 'getprop persist.rokid.glass.sn')
         device_os_version = adb.adb_dev_output(data.device_ip2, 'getprop ro.build.version.incremental')
-        g.device_message["sn"]=device_sn if device_sn else None
-        g.device_message["os_version"]=device_os_version if device_os_version else None
-        print(data.device_ip2,g.device_message)
+        device_message["sn"]=device_sn if device_sn else None
+        device_message["os_version"]=device_os_version if device_os_version else None
+        print(data.device_ip2,device_message)
         return render_template("phymem.html")
 
 def line_area_stack() -> Line:
@@ -262,10 +262,13 @@ def get_line_chart():
 @app.route("/lineDynamicData")
 def update_line_data():
     if data.device_ip2:
-        info = meminfo.get_device_meminfo(data.device_ip2)
-        info = [ round(float(i)/1024,2) for i in info ]
-        current_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
-        return jsonify({'name':current_time,'value':{'total_mem': info[0], 'used_mem': info[1], 'free_mem': info[2]}})
+        try:
+            info = meminfo.get_device_meminfo(data.device_ip2)
+            info = [ round(float(i)/1024,2) for i in info ]
+            current_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
+            return jsonify({'name':current_time,'value':{'total_mem': info[0], 'used_mem': info[1], 'free_mem': info[2]}})
+        except Exception as e:
+            return  jsonify({}) 
     else:
         return  jsonify({})
 
