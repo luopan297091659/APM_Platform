@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>timerDemo</title>
+
+    <script>
+        var second;//时 分 秒
+        second=0;//初始化
+
+        var clock;//计时器
+        function resetTimer()//重置
+        {
+            clearInterval(clock);
+            second=0;
+            document.getElementById('timeValue').value=second+'秒';
+        }
+
+        function startTimer()//开始
+        {
+            clock=setInterval(timer,1000);
+        }
+
+        function stopTimer() {
+            //停止计时
+            clearInterval(clock);
+            document.getElementById('timeValue').value=second+'秒';
+        }
+        //计时函数
+        function timer(){
+            second++;
+            document.getElementById('timeValue').value=second+'秒';
+        }
+
+    </script>
+</head>
+<body>
+
+
+<div style="text-align: center">
+    <input type="text" id="timeValue" value="0秒" readonly><br>
+    <button type="button" onclick="startTimer()">开始</button> <button type="button" onclick="stopTimer()">暂停</button> <button type="button" onclick="resetTimer()">重置</button>
+</div>
+</body>
+</html>

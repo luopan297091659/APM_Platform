@@ -4,10 +4,9 @@ from .android_adb import ADB as a
 import os,re
 
 a = a()
-class device_meminfo(object):
+class meminfo(object):
     def __init__(self, *args):
         pass
-
 
     def get_device_meminfo(self, device_info):
         """

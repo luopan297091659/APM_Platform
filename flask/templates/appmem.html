@@ -1,61 +1,45 @@
-<!--
-    THIS EXAMPLE WAS DOWNLOADED FROM https://echarts.apache.org/examples/zh/editor.html?c=area-stack
--->
 <!DOCTYPE html>
 <html style="height: 100%">
     <head>
         <meta charset="utf-8">
         <script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
     </head>
     <body style="height: 100%; margin: 0">
-        <h1 align="center">AR Glass设备性能监控</h1>
-        <div>
+        <div class="headerpage"></div>
+        <h1 align="center">AR Glass设备应用内存性能监控</h1>
+        <form action="/device" method="get">
             <p>请输入设备sn或ip地址</p>
-            <input type="text"  >
-            <p>请选择监控项</p>
-            <input type="text"  >
-        </div>
-        <div class="father">
-            <el-button type="primary" @click="endHandler" style="float:right">&nbsp&nbsp结束录制&nbsp&nbsp;</el-button>
-            <el-button type="primary" @click="startHandler" style="float:right">&nbsp&nbsp开始录制&nbsp;&nbsp;</el-button>
+            <input type="text" name="device" id="device">
+            <input type="submit" value="立即连接" >
+        </form>
+        <p>请选择监控进程</p>
+            <select>
+                <option value="PhysicsMem">PhysicsMem</option>
+
+            </select>
+        <div id="app">
+            <input type="text" id="timeValue" value="0秒" readonly style="float:right" />
+            <br>
+            <button type="button" onclick="stopTimer()" style="float:right">&nbsp;停止记录&nbsp;</button>
+            <button type="button" onclick="startTimer()" style="float:right">&nbsp;开始记录&nbsp;</button>
         </div>
         <br>
         <div id="container" style="height: 100%"></div>
-
-        <!-- Uncomment this line if you want to dataTool extension
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/extension/dataTool.min.js"></script>
-        -->
-        <!-- Uncomment this line if you want to use gl extension
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl@2/dist/echarts-gl.min.js"></script>
-        -->
-        <!-- Uncomment this line if you want to echarts-stat extension
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat@latest/dist/ecStat.min.js"></script>
-        -->
-        <!-- Uncomment this line if you want to use map
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/map/js/china.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/map/js/world.js"></script>
-        -->
-        <!-- Uncomment these two lines if you want to use bmap extension
-        <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=<Your Key Here>"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5/dist/extension/bmap.min.js"></script>
-        -->
-
         <script type="text/javascript">
+        $(function(){
+            /*公共部分
+            * 导航栏
+            * footer CopyRight
+            */
+            // $(".headerpage").load("load/header.html");/*浏览器容易引起跨域问题*/
+            $(".headerpage").load('/ #navigation');
+        });
         var dom = document.getElementById("container");
         var chart = echarts.init(dom);
         var app = {};
-        //var time_data=[];
-        //var data1=[];
-        //var data2=[];
-        //var data3=[];
-        //var data4=[];
-        //var data5=[];
-        //var data6=[];
-        //var data7=[];
-        //var data8=[];
-        //var option;
-        
         option = {
                     tooltip: {
                         trigger: 'axis',
@@ -67,7 +51,6 @@
                         }
                     },
                     legend: {
-                        //data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
                         data: ['java_mem', 'native_mem', 'code_mem', 'stack_mem', 'graph_mem', 'others_mem', 'system_mem', 'total_mem']
                     },
                     toolbox: {
@@ -179,15 +162,8 @@
                         {
                             name: 'total_mem',
                             type: 'line',
-                            stack: '总量',
-                            label: {
-                                show: true,
-                                position: 'top'
-                            },
-                            areaStyle: {},
-                            emphasis: {
-                                focus: 'series'
-                            },
+                            symbol: 'circle',
+                            symbolSize: 8, 
                             data: []
                         },
                     ]
@@ -195,7 +171,7 @@
         $(
             function () {
                 fetchData(chart);
-                setInterval(getDynamicData, 2000);
+                setInterval(getDynamicData, 10000);
             }
         );
 
@@ -215,9 +191,6 @@
                     data6 = chart.getOption().series[5].data;
                     data7 = chart.getOption().series[6].data;
                     data8 = chart.getOption().series[7].data;
-                    data = chart.getOption().series[0].data
-                    //old_data = chart.getOption().series;
-                    
                 }
             });
         }
@@ -250,7 +223,6 @@
                             }
                         },
                         legend: {
-                            //data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
                             data: ['java_mem', 'native_mem', 'code_mem', 'stack_mem', 'graph_mem', 'others_mem', 'system_mem', 'total_mem']
                         },
                         xAxis: [
@@ -274,10 +246,10 @@
                                     opacity: 0.8,
                                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                                         offset: 0,
-                                        color: 'rgba(128, 255, 165)'
+                                        color: 'rgba(0,255,255)'
                                     }, {
                                         offset: 1,
-                                        color: 'rgba(1, 191, 236)'
+                                        color: 'rgba(0,255,255)'
                                     }])
                                 }
                             },
@@ -294,10 +266,10 @@
                                     opacity: 0.8,
                                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                                         offset: 0,
-                                        color: 'rgba(0, 221, 255)'
+                                        color: 'rgba(0,191,255)'
                                     }, {
                                         offset: 1,
-                                        color: 'rgba(77, 119, 255)'
+                                        color: 'rgba(0,191,255)'
                                     }])
                                 }
                             },
@@ -314,10 +286,10 @@
                                     opacity: 0.8,
                                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                                         offset: 0,
-                                        color: 'rgba(55, 162, 255)'
+                                        color: 'rgba(100,149,237)'
                                     }, {
                                         offset: 1,
-                                        color: 'rgba(116, 21, 219)'
+                                        color: 'rgba(100,149,237)'
                                     }])
                                 }
                             },
@@ -334,10 +306,10 @@
                                     opacity: 0.8,
                                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                                         offset: 0,
-                                        color: 'rgba(255, 0, 135)'
+                                        color: 'rgba(0,128,128)'
                                     }, {
                                         offset: 1,
-                                        color: 'rgba(135, 0, 157)'
+                                        color: 'rgba(0,128,128)'
                                     }])
                                 }
                             },
@@ -358,10 +330,10 @@
                                     opacity: 0.8,
                                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                                         offset: 0,
-                                        color: 'rgba(255, 191, 0)'
+                                        color: 'rgba(255,140,0)'
                                     }, {
                                         offset: 1,
-                                        color: 'rgba(224, 62, 76)'
+                                        color: 'rgba(255,140,0)'
                                     }])
                                 }
                             },
@@ -382,10 +354,10 @@
                                     opacity: 0.8,
                                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                                         offset: 0,
-                                        color: 'rgba(225, 191, 0)'
+                                        color: 'rgba(70,130,180)'
                                     }, {
                                         offset: 1,
-                                        color: 'rgba(124, 62, 76)'
+                                        color: 'rgba(70,130,180)'
                                     }])
                                 }
                             },
@@ -406,37 +378,20 @@
                                     opacity: 0.8,
                                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                                         offset: 0,
-                                        color: 'rgba(255, 151, 0)'
+                                        color: 'rgba(119,136,153)'
                                     }, {
                                         offset: 1,
-                                        color: 'rgba(224, 162, 76)'
+                                        color: 'rgba(119,136,153)'
                                     }])
                                 }
                             },
                             {
                                 name: 'total_mem',
                                 type: 'line',
-                                stack: '总量',
-                                label: {
-                                    show: true,
-                                    position: 'top'
-                                },
-                                areaStyle: {},
-                                emphasis: {
-                                    focus: 'series'
-                                },
-                                data: data8,
-                                areaStyle: {
-                                    opacity: 0.8,
-                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                                        offset: 0,
-                                        color: 'rgba(255, 191, 80)'
-                                    }, {
-                                        offset: 1,
-                                        color: 'rgba(224, 62, 176)'
-                                    }])
-                                }
-                            }
+                                symbol: 'circle',
+                                symbolSize: 8, 
+                                data: data8
+                            },
                         ]
                     });
                 }
@@ -445,7 +400,25 @@
 if (option && typeof option === 'object') {
     chart.setOption(option);
 }
+        second=0;//初始化
 
+        var clock;//计时器
+        function startTimer()//开始
+        {
+            clock=setInterval(timer,1000);
+        }
+
+        function stopTimer() {
+            //停止计时
+            clearInterval(clock);
+            document.getElementById('timeValue').value=second+'秒';
+            second=0;
+        }
+        //计时函数
+        function timer(){
+            second++;
+            document.getElementById('timeValue').value=second+'秒';
+        }
         </script>
     </body>
 </html>
