@@ -19,6 +19,7 @@ app = Flask(__name__, template_folder='templates', static_folder="static")
 class DataStore():
     device_ip1 = None
     device_ip2 = None
+    apps_names = []
 
 data = DataStore()
 
@@ -40,12 +41,18 @@ def lines():
 def connect_device():
     if request.method == "GET":
         data.device_ip1 = request.args['device']
-        adb.adb_connect(str(data.device_ip1))
-        process_infos = adb.adb_dev_output(data.device_ip1, "dumpsys meminfo |grep -A 2000 'PSS by process' |grep -B 2000 'PSS by OOM adjustment' |grep -v PSS|grep -v grep |grep : |cut -d':' -f2")
-        process_list = list(filter(None,process_infos.split(" ")))
-        process_list = [ i for i in process_list if i.find('pid')!=1 ]
-        return render_template("appmem.html", processes=process_list)
+        try:
+            adb.adb_connect(str(data.device_ip1))
+            process_infos = adb.adb_dev_output(data.device_ip1, "dumpsys meminfo |grep -A 2000 'PSS by process' |grep -B 2000 'PSS by OOM adjustment' |grep -v PSS|grep -v grep |grep : |cut -d':' -f2")
+            process_list = list(filter(None,process_infos.split(" ")))
+            data.apps_names = [ i for i in process_list if i.find('pid')!=1 ]
+            return render_template("appmem.html")
+        except Exception as e:
+            return render_template("appmem.html") 
 
+@app.route("/appsnames")
+def apps_names():
+    return jsonify(data.apps_names)
 
 def line_area_stacks() -> Line:
     line = (
@@ -179,13 +186,15 @@ def link_device():
     device_message = {}
     if request.method == "GET":
         data.device_ip2 = request.args['device']
-        adb.adb_connect(str(data.device_ip2))
-        device_sn = adb.adb_dev_output(data.device_ip2, 'getprop persist.rokid.glass.sn')
-        device_os_version = adb.adb_dev_output(data.device_ip2, 'getprop ro.build.version.incremental')
-        device_message["sn"]=device_sn if device_sn else None
-        device_message["os_version"]=device_os_version if device_os_version else None
-        print(data.device_ip2,device_message)
-        return render_template("phymem.html")
+        try:
+            adb.adb_connect(str(data.device_ip2))
+            device_sn = adb.adb_dev_output(data.device_ip2, 'getprop persist.rokid.glass.sn')
+            device_os_version = adb.adb_dev_output(data.device_ip2, 'getprop ro.build.version.incremental')
+            device_message["sn"]=device_sn if device_sn else None
+            device_message["os_version"]=device_os_version if device_os_version else None
+            return render_template("phymem.html")
+        except Exception as e:
+            return render_template("phymem.html") 
 
 def line_area_stack() -> Line:
     line = (

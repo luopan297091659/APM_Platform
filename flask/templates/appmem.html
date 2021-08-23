@@ -16,7 +16,7 @@
             <input type="submit" value="立即连接" >
         </form>
         <p>请选择监控进程</p>
-            <select>
+            <select id="appsname">
                 <option value="PhysicsMem">PhysicsMem</option>
 
             </select>
@@ -419,6 +419,30 @@ if (option && typeof option === 'object') {
             second++;
             document.getElementById('timeValue').value=second+'秒';
         }
+
+	$(function() {
+        $("#appsname").change(function() {
+			//获取获取被选中的id
+			var ValList = $("#appsname option:selected").val();
+			//清空select的值          <option value="PhysicsMem">PhysicsMem</option>
+			$.ajax({
+				url: "/appsname",
+				type: "POST",
+				data: ValList,
+				success: function(ajaxJson) {
+					if(ajaxJson.success) {
+						//添加select第一个option
+						for(var i = 0; i < ajaxJson.obj.length; i++) {
+							//添加option元素
+							$("#appsname").append("<option value='" + ajaxJson.obj[i] + "'>" + ajaxJson.obj[i]+ "</option>");
+						}
+					} else {
+						alert(ajaxJson.msg);
+					}
+				}
+			})
+		})
+	})
         </script>
     </body>
 </html>
