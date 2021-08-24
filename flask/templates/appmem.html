@@ -11,15 +11,20 @@
         <div class="headerpage"></div>
         <h1 align="center">AR Glass设备应用内存性能监控</h1>
         <form action="/device" method="get">
-            <p>请输入设备sn或ip地址</p>
+            <p>请输入设备ip地址</p>
             <input type="text" name="device" id="device">
-            <input type="submit" value="立即连接" >
+            <p>请输入监控应用包名</p>
+            <input type="text" name="appname" id="device">
+            <br>
+            <br>
+            <input type="submit" value="&nbsp;&nbsp;立即连接" >
         </form>
-        <p>请选择监控进程</p>
+        <!-- <div class="col-sm-10"></div>
+            <p>请选择监控进程</p>
             <select id="appsname">
-                <option value="PhysicsMem">PhysicsMem</option>
-
+                <option selected value="">---请选择---</option>
             </select>
+        </div> -->
         <div id="app">
             <input type="text" id="timeValue" value="0秒" readonly style="float:right" />
             <br>
@@ -37,6 +42,31 @@
             // $(".headerpage").load("load/header.html");/*浏览器容易引起跨域问题*/
             $(".headerpage").load('/ #navigation');
         });
+        // $(function appsname() {
+        // $("#appsname").change(function() {
+		// 	//获取获取被选中的id
+		// 	var ValList = $("#appsname option:selected").val();
+		// 	//清空select的值          <option value="PhysicsMem">PhysicsMem</option>
+		// 	$.ajax({
+		// 		url: "/appsname",
+		// 		type: "POST",
+		// 		data: ValList,
+		// 		success: function(ajaxJson) {
+        //             console.log(ajaxJson)
+		// 			if(ajaxJson.success) {
+		// 				//添加select第一个option
+		// 				for(var i = 0; i < ajaxJson.obj.length; i++) {
+		// 					//添加option元素
+		// 					$("#appsname").append("<option value='" + ajaxJson.obj[i] + "'>" + ajaxJson.obj[i]+ "</option>");
+		// 				}
+		// 			} else {
+		// 				alert(ajaxJson.msg);
+		// 			}
+		// 		}
+		// 	})
+		// })
+	    // })
+        var checkValue=$("#appsname").val();
         var dom = document.getElementById("container");
         var chart = echarts.init(dom);
         var app = {};
@@ -204,9 +234,9 @@
                 dataType: "json",
                 success: function (result) {
                     time_data.push([result.name]);
-                    data1.push([result.name,result.value.code_mem]);
+                    data1.push([result.name,result.value.java_mem]);
                     data2.push([result.name,result.value.graph_mem]);
-                    data3.push([result.name,result.value.java_mem]);
+                    data3.push([result.name,result.value.code_mem]);
                     data4.push([result.name,result.value.native_mem]);
                     data5.push([result.name,result.value.others_mem]);
                     data6.push([result.name,result.value.stack_mem]);
@@ -419,30 +449,6 @@ if (option && typeof option === 'object') {
             second++;
             document.getElementById('timeValue').value=second+'秒';
         }
-
-	$(function() {
-        $("#appsname").change(function() {
-			//获取获取被选中的id
-			var ValList = $("#appsname option:selected").val();
-			//清空select的值          <option value="PhysicsMem">PhysicsMem</option>
-			$.ajax({
-				url: "/appsname",
-				type: "POST",
-				data: ValList,
-				success: function(ajaxJson) {
-					if(ajaxJson.success) {
-						//添加select第一个option
-						for(var i = 0; i < ajaxJson.obj.length; i++) {
-							//添加option元素
-							$("#appsname").append("<option value='" + ajaxJson.obj[i] + "'>" + ajaxJson.obj[i]+ "</option>");
-						}
-					} else {
-						alert(ajaxJson.msg);
-					}
-				}
-			})
-		})
-	})
         </script>
     </body>
 </html>

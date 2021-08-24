@@ -19,7 +19,7 @@ app = Flask(__name__, template_folder='templates', static_folder="static")
 class DataStore():
     device_ip1 = None
     device_ip2 = None
-    apps_names = []
+    app_name = None
 
 data = DataStore()
 
@@ -41,16 +41,18 @@ def lines():
 def connect_device():
     if request.method == "GET":
         data.device_ip1 = request.args['device']
+        data.app_name = request.args['appname']
         try:
             adb.adb_connect(str(data.device_ip1))
-            process_infos = adb.adb_dev_output(data.device_ip1, "dumpsys meminfo |grep -A 2000 'PSS by process' |grep -B 2000 'PSS by OOM adjustment' |grep -v PSS|grep -v grep |grep : |cut -d':' -f2")
-            process_list = list(filter(None,process_infos.split(" ")))
-            data.apps_names = [ i for i in process_list if i.find('pid')!=1 ]
+            # process_infos = adb.adb_dev_output(data.device_ip1, "dumpsys meminfo |grep -A 2000 'PSS by process' |grep -B 2000 'PSS by OOM adjustment' |grep -v PSS|grep -v grep |grep : |cut -d':' -f2")
+            # process_list = list(filter(None,process_infos.split(" ")))
+            # data.apps_names = [ i for i in process_list if 'pid' not in i ]
+            # print(11111,data.apps_names)
             return render_template("appmem.html")
         except Exception as e:
             return render_template("appmem.html") 
 
-@app.route("/appsnames")
+@app.route("/appsname", methods=["POST", "GET"])
 def apps_names():
     return jsonify(data.apps_names)
 
@@ -173,8 +175,10 @@ def update_line_datas():
     current_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
     if data.device_ip1:
         try:
-            info = meminfo.get_app_meminfo(data.device_ip1, "com.rokid.ai.turen")
+            info = meminfo.get_app_meminfo(data.device_ip1, data.app_name)
+            print(111,info)
             info = [ round(float(i)/1024,2) for i in info ]
+            print(222,info)
             return jsonify({'name':current_time,'value':{'java_mem': info[0], 'native_mem': info[1], 'code_mem': info[2], 'stack_mem': info[3], 'graph_mem': info[4], 'others_mem': info[5], 'system_mem': info[6], 'total_mem': info[7]}})
         except Exception as e:
             return  jsonify({}) 
