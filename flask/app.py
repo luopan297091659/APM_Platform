@@ -11,17 +11,18 @@ from pyecharts.types import Toolbox
 from data_collection import meminfo_query,sql_opera,android_adb
 from pyecharts.commons.utils import JsCode
 import datetime,string,os
+from threading import Thread, local, current_thread
 
 adb = android_adb.ADB()
 meminfo = meminfo_query.meminfo()
 app = Flask(__name__, template_folder='templates', static_folder="static")
 
-class DataStore():
+class local():
     device_ip1 = None
     device_ip2 = None
     app_name = None
 
-data = DataStore()
+data = local()
 
 @app.route("/")
 def index():
@@ -298,5 +299,5 @@ def history():
 
 if __name__ == '__main__':
     app._static_folder = os.path.abspath("static/")
-    app.run(host='0.0.0.0', port=8003,debug=True)
+    app.run(host='0.0.0.0', port=8003,debug=False)
 
