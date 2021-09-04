@@ -11,12 +11,8 @@
         <div class="headerpage"></div>
         <h1 align="center">AR Glass设备应用内存性能监控</h1>
         <form action="/device" method="get">
-            <p>请输入设备ip地址</p>
-            <input type="text" name="device" id="device">
-            <p>请输入监控应用包名</p>
-            <input type="text" name="appname" id="device">
-            <br>
-            <br>
+            <input type="text" name="device" id="device" value="请输入设备ip地址" onfocus="javascript:if(this.value=='请输入设备ip地址')this.value='';">
+            <input type="text" name="appname" id="device" value="请输入app包名" onfocus="javascript:if(this.value=='请输入app包名')this.value='';">
             <input type="submit" value="&nbsp;&nbsp;立即连接" >
         </form>
         <!-- <div class="col-sm-10"></div>

@@ -10,8 +10,7 @@
         <div class="headerpage"></div>
         <h1 align="center">AR Glass设备物理内存性能监控</h1>
         <form action="/linkdevice" method="get">
-            <p>请输入设备sn或ip地址</p>
-            <input type="text" name="device" id="device">
+            <input type="text" name="device" id="device" value="请输入设备ip地址" onfocus="javascript:if(this.value=='请输入设备ip地址')this.value='';">
             <input type="submit" value="立即连接" >
         </form>
         <div id="app">
@@ -21,7 +20,7 @@
             <button type="button" onclick="startTimer()" style="float:right">&nbsp;开始记录&nbsp;</button>
         </div>
         <br>
-        <div id="container" style="height: 70%"></div>
+        <div id="container" style="height: 50%"></div>
         <script type="text/javascript">
         $(function(){
             /*公共部分
