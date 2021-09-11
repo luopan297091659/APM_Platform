@@ -219,13 +219,7 @@ def line_area_stack() -> Line:
     line = (
         Line()
         .add_xaxis([])
-        .add_yaxis('total_mem',
-                [],
-                is_symbol_show=True,
-                areastyle_opts=opts.AreaStyleOpts(
-                opacity=0.8
-                )
-                )
+        .add_yaxis('total_mem', [], is_symbol_show=True)
         .add_yaxis('used_mem',
                 [],
                 stack='stack',
