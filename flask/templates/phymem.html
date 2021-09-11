@@ -23,11 +23,6 @@
         <div id="container" style="height: 70%"></div>
         <script type="text/javascript">
         $(function(){
-            /*公共部分
-            * 导航栏
-            * footer CopyRight
-            */
-            // $(".headerpage").load("load/header.html");/*浏览器容易引起跨域问题*/
             $(".headerpage").load('/ #navigation');
         });
         var dom = document.getElementById("container");
@@ -43,9 +38,6 @@
                             }
                         }
                     },
-                    legend: {
-                        data: ['total_mem', 'used_mem', 'free_mem']
-                    },
                     toolbox: {
                          feature: {
                               saveAsImage: {}
@@ -57,59 +49,6 @@
                         bottom: '3%',
                         containLabel: true
                     },
-                    xAxis: [
-                        {
-                            type: 'category',
-                            boundaryGap: false,
-                            data: []
-                        }
-                    ],
-                    yAxis: [
-                        {
-                            type: 'value'
-                        }
-                    ],
-                    series: [
-                        {
-                            name: 'total_mem',
-                            type: 'line',
-                            symbol: 'circle',
-                            symbolSize: 8, 
-                            data: [],
-                            areaStyle: {
-                                    opacity: 0.8,
-                                    color: "#5B00AE"
-                                }
-                        },
-                        {
-                            name: 'used_mem',
-                            type: 'line',
-                            stack: '总量',
-                            areaStyle: {},
-                            emphasis: {
-                                focus: 'series'
-                            },
-                            data: [],
-                            areaStyle: {
-                                    opacity: 0.8,
-                                    color: "#FF8000"
-                                }
-                        },
-                        {
-                            name: 'free_mem',
-                            type: 'line',
-                            stack: '总量',
-                            areaStyle: {},
-                            emphasis: {
-                                focus: 'series'
-                            },
-                            data: [],
-                            areaStyle: {
-                                    opacity: 0.8,
-                                    color: "#CCFF80"
-                                }
-                        },
-                    ]
                 };
         $(
             function () {

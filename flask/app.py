@@ -73,7 +73,6 @@ def line_area_stacks() -> Line:
             yaxis_opts=opts.AxisOpts(type_="value"),
         )
     )
-    line.set_global_opts(datazoom_opts=opts.DataZoomOpts(orient="horizontal"))
 
     line = (
         Line()
@@ -177,9 +176,7 @@ def update_line_datas():
     if data.device_ip1:
         try:
             info = meminfo.get_app_meminfo(data.device_ip1, data.app_name)
-            print(111,info)
             info = [ round(float(i)/1024,2) for i in info ]
-            print(222,info)
             return jsonify({'name':current_time,'value':{'java_mem': info[0], 'native_mem': info[1], 'code_mem': info[2], 'stack_mem': info[3], 'graph_mem': info[4], 'other_mem': info[5], 'system_mem': info[6], 'total_mem': info[7]}})
         except Exception as e:
             return  jsonify({}) 

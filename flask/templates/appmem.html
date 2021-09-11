@@ -38,51 +38,34 @@
             // $(".headerpage").load("load/header.html");/*浏览器容易引起跨域问题*/
             $(".headerpage").load('/ #navigation');
         });
-        // $(function appsname() {
-        // $("#appsname").change(function() {
-		// 	//获取获取被选中的id
-		// 	var ValList = $("#appsname option:selected").val();
-		// 	//清空select的值          <option value="PhysicsMem">PhysicsMem</option>
-		// 	$.ajax({
-		// 		url: "/appsname",
-		// 		type: "POST",
-		// 		data: ValList,
-		// 		success: function(ajaxJson) {
-        //             console.log(ajaxJson)
-		// 			if(ajaxJson.success) {
-		// 				//添加select第一个option
-		// 				for(var i = 0; i < ajaxJson.obj.length; i++) {
-		// 					//添加option元素
-		// 					$("#appsname").append("<option value='" + ajaxJson.obj[i] + "'>" + ajaxJson.obj[i]+ "</option>");
-		// 				}
-		// 			} else {
-		// 				alert(ajaxJson.msg);
-		// 			}
-		// 		}
-		// 	})
-		// })
-	    // })
         var checkValue=$("#appsname").val();
         var dom = document.getElementById("container");
         var chart = echarts.init(dom);
         var app = {};
         option = {
                     tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {
-                            type: 'cross',
-                            label: {
-                                backgroundColor: '#6a7985'
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'cross',
+                                label: {
+                                    backgroundColor: '#6a7985'
+                                }
                             }
-                        }
-                    },
-                    legend: {
-                        data: ['java_mem', 'native_mem', 'code_mem', 'stack_mem', 'graph_mem', 'other_mem', 'system_mem', 'total_mem']
-                    },
-                    toolbox: {
-                         feature: {
-                              saveAsImage: {}
-                          }
+                        },
+                    toolbox:{
+                        show: true,
+                        feature: {
+                            //saveAsImage: {}
+                            dataView: { //数据视图
+                                show: true
+                            },
+                            dataZoom: { //数据缩放视图
+                                show: true
+                            },
+                            saveAsImage: {//保存图片
+                                show: true
+                            }
+                            }
                     },
                     grid: {
                         left: '3%',
@@ -90,110 +73,7 @@
                         bottom: '3%',
                         containLabel: true
                     },
-                    xAxis: [
-                        {
-                            type: 'category',
-                            boundaryGap: false,
-                            data: []
-                        }
-                    ],
-                    yAxis: [
-                        {
-                            type: 'value'
-                        }
-                    ],
-                    series: [
-                        {
-                            name: 'java_mem',
-                            type: 'line',
-                            stack: '总量',
-                            areaStyle: {},
-                            emphasis: {
-                                focus: 'series'
-                            },
-                            data: []
-                        },
-                        {
-                            name: 'native_mem',
-                            type: 'line',
-                            stack: '总量',
-                            areaStyle: {},
-                            emphasis: {
-                                focus: 'series'
-                            },
-                            data: []
-                        },
-                        {
-                            name: 'code_mem',
-                            type: 'line',
-                            stack: '总量',
-                            areaStyle: {},
-                            emphasis: {
-                                focus: 'series'
-                            },
-                            data: []
-                        },
-                        {
-                            name: 'stack_mem',
-                            type: 'line',
-                            stack: '总量',
-                            areaStyle: {},
-                            emphasis: {
-                                focus: 'series'
-                            },
-                            data: []
-                        },
-                        {
-                            name: 'graph_mem',
-                            type: 'line',
-                            stack: '总量',
-                            label: {
-                                show: true,
-                                position: 'top'
-                            },
-                            areaStyle: {},
-                            emphasis: {
-                                focus: 'series'
-                            },
-                            data: []
-                        },
-                        {
-                            name: 'other_mem',
-                            type: 'line',
-                            stack: '总量',
-                            label: {
-                                show: true,
-                                position: 'top'
-                            },
-                            areaStyle: {},
-                            emphasis: {
-                                focus: 'series'
-                            },
-                            data: []
-                        },
-                        {
-                            name: 'system_mem',
-                            type: 'line',
-                            stack: '总量',
-                            label: {
-                                show: true,
-                                position: 'top'
-                            },
-                            areaStyle: {},
-                            emphasis: {
-                                focus: 'series'
-                            },
-                            data: []
-                        },
-                        {
-                            name: 'total_mem',
-                            type: 'line',
-                            symbol: 'circle',
-                            symbolSize: 8, 
-                            data: []
-                        },
-                    ]
-                };
+        };
         $(
             function () {
                 fetchData(chart);
@@ -239,15 +119,6 @@
                     data7.push([result.name,result.value.system_mem]);
                     data8.push([result.name,result.value.total_mem]);
                     chart.setOption({
-                        tooltip: {
-                            trigger: 'axis',
-                            axisPointer: {
-                                type: 'cross',
-                                label: {
-                                    backgroundColor: '#6a7985'
-                                }
-                            }
-                        },
                         legend: {
                             data: ['java_mem', 'native_mem', 'code_mem', 'stack_mem', 'graph_mem', 'other_mem', 'system_mem', 'total_mem']
                         },
@@ -415,7 +286,8 @@
                                 name: 'total_mem',
                                 type: 'line',
                                 symbol: 'circle',
-                                symbolSize: 8, 
+                                symbolSize: 8,
+                                smooth: true,                                 
                                 data: data8
                             },
                         ]
