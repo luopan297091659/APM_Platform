@@ -77,7 +77,7 @@
                         }
                     },
                     legend: {
-                        data: ['java_mem', 'native_mem', 'code_mem', 'stack_mem', 'graph_mem', 'others_mem', 'system_mem', 'total_mem']
+                        data: ['java_mem', 'native_mem', 'code_mem', 'stack_mem', 'graph_mem', 'other_mem', 'system_mem', 'total_mem']
                     },
                     toolbox: {
                          feature: {
@@ -158,7 +158,7 @@
                             data: []
                         },
                         {
-                            name: 'others_mem',
+                            name: 'other_mem',
                             type: 'line',
                             stack: '总量',
                             label: {
@@ -231,11 +231,11 @@
                 success: function (result) {
                     time_data.push([result.name]);
                     data1.push([result.name,result.value.java_mem]);
-                    data2.push([result.name,result.value.graph_mem]);
+                    data2.push([result.name,result.value.native_mem]);
                     data3.push([result.name,result.value.code_mem]);
-                    data4.push([result.name,result.value.native_mem]);
-                    data5.push([result.name,result.value.others_mem]);
-                    data6.push([result.name,result.value.stack_mem]);
+                    data4.push([result.name,result.value.stack_mem]);
+                    data5.push([result.name,result.value.graph_mem]);
+                    data6.push([result.name,result.value.other_mem]);
                     data7.push([result.name,result.value.system_mem]);
                     data8.push([result.name,result.value.total_mem]);
                     chart.setOption({
@@ -249,7 +249,7 @@
                             }
                         },
                         legend: {
-                            data: ['java_mem', 'native_mem', 'code_mem', 'stack_mem', 'graph_mem', 'others_mem', 'system_mem', 'total_mem']
+                            data: ['java_mem', 'native_mem', 'code_mem', 'stack_mem', 'graph_mem', 'other_mem', 'system_mem', 'total_mem']
                         },
                         xAxis: [
                     {
@@ -364,7 +364,7 @@
                                 }
                             },
                             {
-                                name: 'others_mem',
+                                name: 'other_mem',
                                 type: 'line',
                                 stack: '总量',
                                 label: {
@@ -448,4 +448,3 @@ if (option && typeof option === 'object') {
         </script>
     </body>
 </html>
-    

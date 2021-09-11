@@ -117,7 +117,7 @@ def line_area_stacks() -> Line:
                 linestyle_opts=opts.LineStyleOpts(width=0),
                 )
 
-        .add_yaxis('others_mem',
+        .add_yaxis('other_mem',
                 [],
                 stack='stack',
                 is_smooth=True,
@@ -154,7 +154,7 @@ def line_area_stacks() -> Line:
 def bar_bases() -> Bar:
     c = (
         Bar()
-        .add_xaxis(['java_mem', 'native_mem', 'code_mem', 'stack_mem', 'graph_mem', 'others_mem', 'system_mem', 'total_mem'])
+        .add_xaxis(['java_mem', 'native_mem', 'code_mem', 'stack_mem', 'graph_mem', 'other_mem', 'system_mem', 'total_mem'])
         .add_yaxis("java_mem",color='pink')
         .add_yaxis("native_mem",color='palevioletred')
         .set_global_opts(title_opts=opts.TitleOpts(title="Bar-基本示例", subtitle="我是副标题"))
@@ -180,7 +180,7 @@ def update_line_datas():
             print(111,info)
             info = [ round(float(i)/1024,2) for i in info ]
             print(222,info)
-            return jsonify({'name':current_time,'value':{'java_mem': info[0], 'native_mem': info[1], 'code_mem': info[2], 'stack_mem': info[3], 'graph_mem': info[4], 'others_mem': info[5], 'system_mem': info[6], 'total_mem': info[7]}})
+            return jsonify({'name':current_time,'value':{'java_mem': info[0], 'native_mem': info[1], 'code_mem': info[2], 'stack_mem': info[3], 'graph_mem': info[4], 'other_mem': info[5], 'system_mem': info[6], 'total_mem': info[7]}})
         except Exception as e:
             return  jsonify({}) 
     else:

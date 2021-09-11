@@ -21,8 +21,8 @@ class meminfo(object):
     def get_app_meminfo(self, device_info, app_name):
         result = a.adb_dev_output(device_info, "dumpsys meminfo", app_name,  '|grep -A 12 Summary |grep : |cut -d : -f 2')
         res = list(filter(None,result.split(" ")))
-        java_mem, native_mem, code_mem, stack_mem, graph_mem, others_mem, system_mem, total_mem = res[0], res[1], res[2], res[3], res[4], res[5], res[6], res[7]
-        return java_mem, native_mem, code_mem, stack_mem, graph_mem, others_mem, system_mem, total_mem
+        java_mem, native_mem, code_mem, stack_mem, graph_mem, other_mem, system_mem, total_mem = res[0], res[1], res[2], res[3], res[4], res[5], res[6], res[7]
+        return java_mem, native_mem, code_mem, stack_mem, graph_mem, other_mem, system_mem, total_mem
 
 
     def get_device_info(self, device_info):
